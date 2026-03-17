@@ -2119,7 +2119,6 @@ export default function App() {
           <div className="meta">
             <div className="pill strong">Dossier {selectedDossier}</div>
             <div className="pill">{visibleCases.length} visible</div>
-            <div className="pill">Imported from Excel</div>
           </div>
 
           <div className="grid">
