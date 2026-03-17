@@ -2050,7 +2050,8 @@ export default function App() {
   const [selectedDossier, setSelectedDossier] = useState("01");
   const [revealed, setRevealed] = useState({});
   const [query, setQuery] = useState("");
-  const [showUnrevealedOnly, setShowUnrevealedOnly] = useState(false);
+
+  
   
   const solutions = SOLUTIONS[selectedDossier] ?? Array(100).fill("");
 
@@ -2157,15 +2158,6 @@ const visibleCases = useMemo(() => {
   <small className="filter-help">
     Use single numbers, ranges, or both: 10-20, 3, 8, 25-30
   </small>
-</label>
-
-<label className="toggle">
-  <input
-    type="checkbox"
-    checked={showUnrevealedOnly}
-    onChange={(e) => setShowUnrevealedOnly(e.target.checked)}
-  />
-  <span>Unrevealed only</span>
 </label>
 
 <button onClick={revealAllCurrent}>Reveal all</button>
