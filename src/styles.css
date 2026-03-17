@@ -292,3 +292,17 @@ select {
     min-height: 14px;
   }
 }
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #334155;
+  margin-top: 32px; /* aligns with buttons */
+}
+
+.toggle input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
