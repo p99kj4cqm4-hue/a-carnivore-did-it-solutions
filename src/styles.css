@@ -261,3 +261,8 @@ button, input, select {
     font-size: 0.85rem;
   }
 }
+.filter-help {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
