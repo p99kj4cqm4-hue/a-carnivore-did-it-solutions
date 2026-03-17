@@ -2050,52 +2050,60 @@ export default function App() {
   const [selectedDossier, setSelectedDossier] = useState("01");
   const [revealed, setRevealed] = useState({});
   const [query, setQuery] = useState("");
-
+  const [showUnrevealedOnly, setShowUnrevealedOnly] = useState(false);
+  
   const solutions = SOLUTIONS[selectedDossier] ?? Array(100).fill("");
 
 const visibleCases = useMemo(() => {
   const allCases = Array.from({ length: 100 }, (_, i) => i + 1);
   const input = query.trim();
 
-  if (!input) return allCases;
+  let selected = new Set(allCases);
 
-  const selected = new Set();
+  // 🔹 Apply range / list filter
+  if (input) {
+    selected = new Set();
 
-  input
-    .split(",")
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .forEach((part) => {
-      const rangeMatch = part.match(/^(\d+)\s*-\s*(\d+)$/);
+    input
+      .split(",")
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .forEach((part) => {
+        const rangeMatch = part.match(/^(\d+)\s*-\s*(\d+)$/);
 
-      if (rangeMatch) {
-        let start = Number(rangeMatch[1]);
-        let end = Number(rangeMatch[2]);
+        if (rangeMatch) {
+          let start = Number(rangeMatch[1]);
+          let end = Number(rangeMatch[2]);
 
-        if (start > end) {
-          [start, end] = [end, start];
+          if (start > end) [start, end] = [end, start];
+
+          start = Math.max(1, start);
+          end = Math.min(100, end);
+
+          for (let i = start; i <= end; i++) {
+            selected.add(i);
+          }
+          return;
         }
 
-        start = Math.max(1, start);
-        end = Math.min(100, end);
-
-        for (let i = start; i <= end; i += 1) {
-          selected.add(i);
+        const single = Number(part);
+        if (!isNaN(single) && single >= 1 && single <= 100) {
+          selected.add(single);
         }
-        return;
-      }
+      });
+  }
 
-      const singleMatch = part.match(/^\d+$/);
-      if (singleMatch) {
-        const value = Number(part);
-        if (value >= 1 && value <= 100) {
-          selected.add(value);
-        }
-      }
-    });
+  // 🔥 Apply unrevealed filter
+  if (showUnrevealedOnly) {
+    selected = new Set(
+      [...selected].filter(
+        (n) => !revealed[`${selectedDossier}-${n}`]
+      )
+    );
+  }
 
   return allCases.filter((n) => selected.has(n));
-}, [query]);
+}, [query, showUnrevealedOnly, revealed, selectedDossier]);
 
   const isRevealed = (caseNumber) => Boolean(revealed[`${selectedDossier}-${caseNumber}`]);
 
@@ -2151,9 +2159,18 @@ const visibleCases = useMemo(() => {
   </small>
 </label>
 
-          <button onClick={revealAllCurrent}>Reveal all</button>
-          <button onClick={hideAllCurrent}>Hide all</button>
-          <button onClick={() => setQuery("")}>Reset filter</button>
+<label className="toggle">
+  <input
+    type="checkbox"
+    checked={showUnrevealedOnly}
+    onChange={(e) => setShowUnrevealedOnly(e.target.checked)}
+  />
+  <span>Unrevealed only</span>
+</label>
+
+<button onClick={revealAllCurrent}>Reveal all</button>
+<button onClick={hideAllCurrent}>Hide all</button>
+<button onClick={() => setQuery("")}>Reset filter</button>
         </section>
 
         <section className="card">
