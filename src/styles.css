@@ -56,15 +56,15 @@ button, input, select {
   display: grid;
   grid-template-columns: 220px 1fr auto auto auto;
   gap: 12px;
-  align-items: start;
+  align-items: end;
 }
 
 .controls label {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 0.9rem;
+  gap: 8px;
   color: #334155;
+  font-size: 0.95rem;
 }
 .filter {
   display: flex;
@@ -275,5 +275,6 @@ button, input, select {
 .filter-help {
   color: #64748b;
   font-size: 0.8rem;
+  line-height: 1.2;
   margin-top: 4px;
 }
