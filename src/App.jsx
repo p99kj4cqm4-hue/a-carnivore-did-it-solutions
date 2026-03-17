@@ -2053,11 +2053,49 @@ export default function App() {
 
   const solutions = SOLUTIONS[selectedDossier] ?? Array(100).fill("");
 
-  const visibleCases = useMemo(() => {
-    return Array.from({ length: 100 }, (_, i) => i + 1).filter((n) =>
-      query.trim() ? String(n).includes(query.trim()) : true
-    );
-  }, [query]);
+const visibleCases = useMemo(() => {
+  const allCases = Array.from({ length: 100 }, (_, i) => i + 1);
+  const input = query.trim();
+
+  if (!input) return allCases;
+
+  const selected = new Set();
+
+  input
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .forEach((part) => {
+      const rangeMatch = part.match(/^(\d+)\s*-\s*(\d+)$/);
+
+      if (rangeMatch) {
+        let start = Number(rangeMatch[1]);
+        let end = Number(rangeMatch[2]);
+
+        if (start > end) {
+          [start, end] = [end, start];
+        }
+
+        start = Math.max(1, start);
+        end = Math.min(100, end);
+
+        for (let i = start; i <= end; i += 1) {
+          selected.add(i);
+        }
+        return;
+      }
+
+      const singleMatch = part.match(/^\d+$/);
+      if (singleMatch) {
+        const value = Number(part);
+        if (value >= 1 && value <= 100) {
+          selected.add(value);
+        }
+      }
+    });
+
+  return allCases.filter((n) => selected.has(n));
+}, [query]);
 
   const isRevealed = (caseNumber) => Boolean(revealed[`${selectedDossier}-${caseNumber}`]);
 
@@ -2103,11 +2141,11 @@ export default function App() {
 
           <label className="filter">
             <span>Filter case numbers</span>
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value.replace(/\D/g, ""))}
-              placeholder="e.g. 1, 2, 10"
-            />
+           <input
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  placeholder="e.g. 10-20, 3, 8, 25-30"
+/>
           </label>
 
           <button onClick={revealAllCurrent}>Reveal all</button>
