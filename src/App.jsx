@@ -2059,52 +2059,45 @@ const visibleCases = useMemo(() => {
   const allCases = Array.from({ length: 100 }, (_, i) => i + 1);
   const input = query.trim();
 
-  let selected = new Set(allCases);
+  if (!input) return allCases;
 
-  // 🔹 Apply range / list filter
-  if (input) {
-    selected = new Set();
+  const selected = new Set();
 
-    input
-      .split(",")
-      .map((part) => part.trim())
-      .filter(Boolean)
-      .forEach((part) => {
-        const rangeMatch = part.match(/^(\d+)\s*-\s*(\d+)$/);
+  input
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .forEach((part) => {
+      const rangeMatch = part.match(/^(\d+)\s*-\s*(\d+)$/);
 
-        if (rangeMatch) {
-          let start = Number(rangeMatch[1]);
-          let end = Number(rangeMatch[2]);
+      if (rangeMatch) {
+        let start = Number(rangeMatch[1]);
+        let end = Number(rangeMatch[2]);
 
-          if (start > end) [start, end] = [end, start];
-
-          start = Math.max(1, start);
-          end = Math.min(100, end);
-
-          for (let i = start; i <= end; i++) {
-            selected.add(i);
-          }
-          return;
+        if (start > end) {
+          [start, end] = [end, start];
         }
 
-        const single = Number(part);
-        if (!isNaN(single) && single >= 1 && single <= 100) {
-          selected.add(single);
-        }
-      });
-  }
+        start = Math.max(1, start);
+        end = Math.min(100, end);
 
-  // 🔥 Apply unrevealed filter
-  if (showUnrevealedOnly) {
-    selected = new Set(
-      [...selected].filter(
-        (n) => !revealed[`${selectedDossier}-${n}`]
-      )
-    );
-  }
+        for (let i = start; i <= end; i += 1) {
+          selected.add(i);
+        }
+        return;
+      }
+
+      const singleMatch = part.match(/^\d+$/);
+      if (singleMatch) {
+        const value = Number(part);
+        if (value >= 1 && value <= 100) {
+          selected.add(value);
+        }
+      }
+    });
 
   return allCases.filter((n) => selected.has(n));
-}, [query, showUnrevealedOnly, revealed, selectedDossier]);
+}, [query]);
 
   const isRevealed = (caseNumber) => Boolean(revealed[`${selectedDossier}-${caseNumber}`]);
 
