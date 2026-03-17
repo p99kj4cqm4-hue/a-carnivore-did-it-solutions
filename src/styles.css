@@ -83,7 +83,7 @@ select {
 .controls button {
   cursor: pointer;
   font-weight: 600;
-  margin-top: 32px;
+  margin-top: 28px;
 }
 
 .filter-help {
