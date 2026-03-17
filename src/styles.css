@@ -59,7 +59,7 @@ select {
   display: grid;
   grid-template-columns: 220px minmax(280px, 1fr) auto auto auto;
   gap: 12px;
-  align-items: end;
+  align-items: start;
 }
 
 .controls label {
@@ -83,12 +83,7 @@ select {
 .controls button {
   cursor: pointer;
   font-weight: 600;
-}
-
-.controls button:hover,
-.problem-card:hover {
-  transform: translateY(-1px);
-  transition: transform 0.15s ease;
+  margin-top: 32px;
 }
 
 .filter-help {
