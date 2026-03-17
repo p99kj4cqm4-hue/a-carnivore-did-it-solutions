@@ -80,16 +80,11 @@ button, input, select {
 .controls input,
 .controls select,
 .controls button {
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid #cbd5e1;
-  background: white;
-  padding: 0 14px;
-}
-
-.controls button {
-  cursor: pointer;
+  height: 44px;              /* match inputs */
+  align-self: end;           /* 👈 KEY FIX */
+  margin-top: 0;             /* remove previous hack */
   font-weight: 600;
+  cursor: pointer;
 }
 
 .controls button:hover,
