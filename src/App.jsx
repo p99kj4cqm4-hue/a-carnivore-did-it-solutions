@@ -2139,14 +2139,17 @@ const visibleCases = useMemo(() => {
             </select>
           </label>
 
-          <label className="filter">
-            <span>Filter case numbers</span>
-           <input
-  value={query}
-  onChange={(e) => setQuery(e.target.value)}
-  placeholder="e.g. 10-20, 3, 8, 25-30"
-/>
-          </label>
+<label className="filter">
+  <span>Filter case numbers</span>
+  <input
+    value={query}
+    onChange={(e) => setQuery(e.target.value)}
+    placeholder="e.g. 10-20, 3, 8, 25-30"
+  />
+  <small className="filter-help">
+    Use single numbers, ranges, or both: 10-20, 3, 8, 25-30
+  </small>
+</label>
 
           <button onClick={revealAllCurrent}>Reveal all</button>
           <button onClick={hideAllCurrent}>Hide all</button>
